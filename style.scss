@@ -1,0 +1,96 @@
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    .input_form {
+        margin: 50px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        gap: 30px;
+
+        .input {
+            width: 200px;
+            border: 1px solid black;
+            border-radius: 15px;
+            padding: 10px;  
+        }
+
+        .button {
+            height: 30px;
+            background-color: #4285F4;
+            border: none;
+            color: white;
+
+            &:hover {
+                background-color: #458cff;
+            }
+
+            &:active {
+                background-color: darkblue;
+            }
+        }
+
+        .sort_button_normal {
+            height: 30px;
+            background-color: #F4B400;
+            border: none;
+            color: white;
+
+            &:hover {
+                background-color: #ffc62a;
+            }
+
+            &:active {
+                background-color: #936c00;
+            }
+        }
+        
+
+        .sort_button_reverse {
+            height: 30px;
+            background-color: #0F9D58;
+            border: none;
+            color: white;
+
+            &:hover {
+                background-color: #15d075;
+            }
+
+            &:active {
+                background-color: #0b7542;
+            }
+        }
+    }
+
+    .todo_list {
+        display: flex;
+        gap: 1em;
+        flex-wrap: wrap;
+
+        .new_todo {
+            width: 300px;
+            padding: 1em;
+            border: 1px solid black;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            .delete_button {
+                height: 30px;
+                background-color: #DB4437;
+                border: none;
+                color: white;
+
+                &:hover {
+                    background-color: #f34d3e;
+                }
+
+                &:active {
+                    background-color: #b7392d;
+                }
+            }
+        }
+    }
+}

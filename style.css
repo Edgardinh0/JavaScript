@@ -1,0 +1,79 @@
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+body .input_form {
+  margin: 50px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  gap: 30px;
+}
+body .input_form .input {
+  width: 200px;
+  border: 1px solid black;
+  border-radius: 15px;
+  padding: 10px;
+}
+body .input_form .button {
+  height: 30px;
+  background-color: #4285F4;
+  border: none;
+  color: white;
+}
+body .input_form .button:hover {
+  background-color: #458cff;
+}
+body .input_form .button:active {
+  background-color: darkblue;
+}
+body .input_form .sort_button_normal {
+  height: 30px;
+  background-color: #F4B400;
+  border: none;
+  color: white;
+}
+body .input_form .sort_button_normal:hover {
+  background-color: #ffc62a;
+}
+body .input_form .sort_button_normal:active {
+  background-color: #936c00;
+}
+body .input_form .sort_button_reverse {
+  height: 30px;
+  background-color: #0F9D58;
+  border: none;
+  color: white;
+}
+body .input_form .sort_button_reverse:hover {
+  background-color: #15d075;
+}
+body .input_form .sort_button_reverse:active {
+  background-color: #0b7542;
+}
+body .todo_list {
+  display: flex;
+  gap: 1em;
+  flex-wrap: wrap;
+}
+body .todo_list .new_todo {
+  width: 300px;
+  padding: 1em;
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+body .todo_list .new_todo .delete_button {
+  height: 30px;
+  background-color: #DB4437;
+  border: none;
+  color: white;
+}
+body .todo_list .new_todo .delete_button:hover {
+  background-color: #f34d3e;
+}
+body .todo_list .new_todo .delete_button:active {
+  background-color: #b7392d;
+}/*# sourceMappingURL=style.css.map */
