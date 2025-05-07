@@ -4,19 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
     <title>Weather</title>
 </head>
 <body>
-    <div class="input_wrapper">
-        <h1 class="input_title">Input city name</h1>
-        <input class="input_field">
-        <button class="submit_button">Get Weather</button>
+    <div class="wrapper">
+        <div class="input_wrapper">
+            <h1 class="input_title">Input city name</h1>
+            <input class="input_field">
+            <button class="submit_button">Get Weather</button>
+        </div>
     </div>
-    <img src="" class="image">
     <div class="information">
+        <img src="" class="image">
         <h2 class="city_name"></h2>
         <h3 class="temperature"></h3>
         <h3 class="weather_type"></h3>
+        <button class="close_weather_button">
+            <img src="cross-svgrepo-com.svg" class="image_close"/>
+        </button>
     </div>
+    
 </body>
 </html>
