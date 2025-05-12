@@ -1,30 +1,16 @@
+import { fetchData, todos } from "./api.js";
+
 const inputs = document.querySelectorAll(".input");
 const button = document.querySelector(".button");
 const todoList = document.querySelector(".todo_list");
-const sortButtonNormal = document.querySelector(".sort_button_normal");
-const sortButtonReverse = document.querySelector(".sort_button_reverse");
+const sortButton = document.querySelector(".sort_button");
+const select = document.querySelector(".select_sort_order");
 
-let todos = []
-
-const fetchData = async() => {
-    try {
-        const data = await fetch("https://6709508caf1a3998baa11eb3.mockapi.io/api/v1/todos");
-        todos = await data.json();
-    } catch (err) {
-        console.log(err);
-    }
-}
+let todoArray;
 
 const renderTodo = (todo) => {
     const newTodo = document.createElement('div');
-    // const todoTitle = document.createElement('h2');
-    // const todoDesc = document.createElement('span');
-
-    // todoTitle.innerText = title;
-    // todoDesc.innerText = desc;
-
-    // newTodo.appendChild(todoTitle);
-    // newTodo.appendChild(todoDesc)
+    newTodo.dataset.id = todo.id;
 
     newTodo.insertAdjacentHTML("afterbegin", `
         <h2 class="todo_title">${todo.title}</h2>
@@ -32,85 +18,78 @@ const renderTodo = (todo) => {
         `)
 
     newTodo.classList.add("new_todo");
-    // todoTitle.classList.add("todo_title")
-    // todoDesc.classList.add("todo_desc");
 
     todoList.appendChild(newTodo);
 
-    deleteButton = document.createElement('button');
-    deleteButton.innerText = "PRESS ME";
+    const deleteButton = document.createElement('button');
+    deleteButton.innerText = "Delete ToDo";
     deleteButton.classList.add("delete_button");
     newTodo.appendChild(deleteButton);
 }
 
 const renderTodos = () => {
-    todos.forEach((todo) => renderTodo(todo));
+    todoList.innerHTML = '';
+    todoArray.forEach((todo) => renderTodo(todo));
+}
+
+const renderTodosInitial = () => {
+    todoList.innerHTML = '';
+    todoArray = todos;
+    todos.forEach((todo) => renderTodo(todo))
 }
 
 const handleClick = async (event) => {
     const title = inputs[0].value;
     const desc = inputs[1].value;
 
+    let lastId;
+
+    if (todoArray.length == 0) {
+        lastId = 0;
+    }
+    else {
+        lastId = todoArray.reduce((max, todo) => (Number(todo.id) > max ? max = todo.id : max), Number(todoArray[0].id));
+    }
+
     const newTodo = {
-        id: Math.random(),
         title: title,
         description: desc,
         createdAt: Date.now(),
-        done: false
+        done: false,
+        id: Number(lastId) + 1
     }
 
     try {
-        await fetch("https://6709508caf1a3998baa11eb3.mockapi.io/api/v1/todos", {
+        const data = await fetch("https://6709508caf1a3998baa11eb3.mockapi.io/api/v1/todos", {
             method: "POST",
             body: JSON.stringify(newTodo),
             headers: {
                 'Content-Type': 'application/json'
             }   
         })
-
-        renderTodo(newTodo);
     } catch(err) {
         console.log(err);
     }
-   
-    // const newTodo = document.createElement('div');
-    // // const todoTitle = document.createElement('h2');
-    // // const todoDesc = document.createElement('span');
 
-    // // todoTitle.innerText = title;
-    // // todoDesc.innerText = desc;
+    todoArray.push(newTodo);
 
-    // // newTodo.appendChild(todoTitle);
-    // // newTodo.appendChild(todoDesc)
+    handleSort(event, sortDirectionMap[select.value]);
 
-    // newTodo.insertAdjacentHTML("afterbegin", `
-    //     <h2 class="todo_title">${title}</h2>
-    //     <span class="todo_desc">${desc}</span>
-    //     `)
+    renderTodos();
 
-    // newTodo.classList.add("new_todo");
-    // // todoTitle.classList.add("todo_title")
-    // // todoDesc.classList.add("todo_desc");
+    inputs[0].value = '';
+    inputs[1].value = '';
 
-    // todoList.appendChild(newTodo);
-
-    // deleteButton = document.createElement('button');
-    // deleteButton.innerText = "PRESS ME";
-    // newTodo.appendChild(deleteButton);
+    console.log(todoArray);
 }
 
 const handleDelete = async(event) => {
     if (event.target.tagName == "BUTTON") {
+
+        const itemId = event.target.closest(".new_todo").dataset.id;
+
         try {
-        itemTitle = event.target.closest(".new_todo").children[0].innerText;
-        key = "title"
-
-        const toDoToDelete = todos.find(item => item.title === itemTitle);
-
-        const newTodos = todos.filter(item => item[key] !== itemTitle);
-        todos = newTodos
-
-        await fetch(`https://6709508caf1a3998baa11eb3.mockapi.io/api/v1/todos/${toDoToDelete.id}`, {
+        await fetch(`https://6709508caf1a3998baa11eb3.mockapi.io/api/v1/todos/${itemId} `, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json'
@@ -120,56 +99,35 @@ const handleDelete = async(event) => {
         } catch(err) {
             console.log(err);
         }
+
+        const newTodos = todoArray.filter(item => item.id != itemId);
+        todoArray = newTodos;
+        console.log(todoArray);
     } 
 }
 
-const handleSortNormal = (event) => {
-    
-    function compare(a,b) {
-        if ( a.title < b.title ){
-            return -1;
-          }
-          if ( a.title > b.title ){
-            return 1;
-          }
-          return 0;
-    }
+const sortDirectionMap = {
+    "asc": 1,
+    "desc": -1
+}
 
-    todos.sort(compare);
+const handleSort = (event, param) => {
+
+    todoArray.sort((a,b) => a.title.localeCompare(b.title) * param);
 
     todoList.innerHTML = '';
     renderTodos();
 }
 
-const handleSortReverse = (event) => {
-    
-    function compare(a,b) {
-        if ( a.title < b.title ){
-            return 1;
-        }
-        if ( a.title > b.title ){
-            return -1;
-        }
-        return 0;
-    }
 
-    todos.sort(compare);
-
-    todoList.innerHTML = '';
-    renderTodos();
-}
 
 button.addEventListener("click", handleClick);
 
 todoList.addEventListener("click", handleDelete);
 
-fetchData().then(() => renderTodos());
+sortButton.addEventListener("click", (event) => handleSort(event, sortDirectionMap[select.value]));
 
-sortButtonNormal.addEventListener("click", handleSortNormal);
+fetchData().then(() => renderTodosInitial());
 
-sortButtonReverse.addEventListener("click", handleSortReverse);
 
-// fetchData();
-// data.then((res) => res.json()).then((data) => {
-//     console.log(data);
-// }).catch((err) => console.log(err)).finally( () => {});
+//лейблы сортировка при добавлением, сортировка через select, все запросы перенести в отдельный скрипт и сделать модулем

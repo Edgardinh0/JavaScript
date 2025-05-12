@@ -3,17 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script defer src="script.js"></script>
+    <script type="module" src="script.js"></script>
     <link rel="stylesheet" href="style.css"></link>
     <title>Document</title>
 </head>
 <body>
     <div class=input_form>
-        <input class="input"/>
-        <input class="input"/>
+        <div class="input_wrapper">
+            <span>Title</span>
+            <input class="input"/>
+        </div>
+        <div class="input_wrapper">
+            <span>Description</span>
+            <input class="input"/>
+        </div>
         <button class="button">Add ToDo</button>
-        <button class="sort_button_normal">Sort Normal</button>
-        <button class="sort_button_reverse">Sort Reverse</button>
+        <!-- <button class="sort_button_normal">Sort Normal</button> -->
+        <button class="sort_button">Sort</button>
+        <select class="select_sort_order">
+            <option value="asc">Ascending Order</option>
+            <option value="desc">Descending Order</option>
+        </select>
     </div>
     <div class="todo_list"></div>
 </body>

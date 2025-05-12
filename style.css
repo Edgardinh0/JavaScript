@@ -2,6 +2,8 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
 }
 body .input_form {
   margin: 50px;
@@ -10,7 +12,12 @@ body .input_form {
   display: flex;
   gap: 30px;
 }
-body .input_form .input {
+body .input_form .input_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body .input_form .input_wrapper .input {
   width: 200px;
   border: 1px solid black;
   border-radius: 15px;
@@ -21,6 +28,7 @@ body .input_form .button {
   background-color: #4285F4;
   border: none;
   color: white;
+  border-radius: 10px;
 }
 body .input_form .button:hover {
   background-color: #458cff;
@@ -28,29 +36,25 @@ body .input_form .button:hover {
 body .input_form .button:active {
   background-color: darkblue;
 }
-body .input_form .sort_button_normal {
-  height: 30px;
-  background-color: #F4B400;
-  border: none;
-  color: white;
-}
-body .input_form .sort_button_normal:hover {
-  background-color: #ffc62a;
-}
-body .input_form .sort_button_normal:active {
-  background-color: #936c00;
-}
-body .input_form .sort_button_reverse {
+body .input_form .sort_button {
   height: 30px;
   background-color: #0F9D58;
   border: none;
   color: white;
+  border-radius: 10px;
 }
-body .input_form .sort_button_reverse:hover {
+body .input_form .sort_button:hover {
   background-color: #15d075;
 }
-body .input_form .sort_button_reverse:active {
+body .input_form .sort_button:active {
   background-color: #0b7542;
+}
+body .input_form .select_sort_order {
+  height: 30px;
+  background-color: #d13030;
+  border: none;
+  color: white;
+  border-radius: 10px;
 }
 body .todo_list {
   display: flex;
@@ -62,7 +66,11 @@ body .todo_list .new_todo {
   padding: 1em;
   border: 1px solid black;
   display: flex;
+  overflow-wrap: break-word;
   flex-direction: column;
+  justify-content: space-between;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
   gap: 10px;
 }
 body .todo_list .new_todo .delete_button {
