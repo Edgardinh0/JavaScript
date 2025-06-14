@@ -6,7 +6,7 @@ body {
   font-size: 24px;
 }
 body .input_form {
-  margin: 50px;
+  margin: 15px;
   justify-content: center;
   align-items: center;
   display: flex;
@@ -60,9 +60,12 @@ body .todo_list {
   display: flex;
   gap: 1em;
   flex-wrap: wrap;
+  padding: 1em;
 }
 body .todo_list .new_todo {
-  width: 300px;
+  min-width: 250px;
+  max-width: 300px;
+  flex-grow: 1;
   padding: 1em;
   border: 1px solid black;
   display: flex;
@@ -84,4 +87,12 @@ body .todo_list .new_todo .delete_button:hover {
 }
 body .todo_list .new_todo .delete_button:active {
   background-color: #b7392d;
+}
+body .loader {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4rem;
 }/*# sourceMappingURL=style.css.map */

@@ -1,12 +1,20 @@
-import { fetchData, todos } from "./api.js";
+import { fetchData, postData, deleteData } from "./api.js";
 
 const inputs = document.querySelectorAll(".input");
 const button = document.querySelector(".button");
 const todoList = document.querySelector(".todo_list");
 const sortButton = document.querySelector(".sort_button");
 const select = document.querySelector(".select_sort_order");
+const loader = document.querySelector(".loader");
 
-let todoArray;
+let todos = [];
+
+const loadTodos = async() => {
+    showLoader();
+    todos = await fetchData();
+    renderTodos(todos);
+    hideLoader();
+}
 
 const renderTodo = (todo) => {
     const newTodo = document.createElement('div');
@@ -29,81 +37,41 @@ const renderTodo = (todo) => {
 
 const renderTodos = () => {
     todoList.innerHTML = '';
-    todoArray.forEach((todo) => renderTodo(todo));
-}
-
-const renderTodosInitial = () => {
-    todoList.innerHTML = '';
-    todoArray = todos;
-    todos.forEach((todo) => renderTodo(todo))
+    todos.forEach((todo) => renderTodo(todo));
 }
 
 const handleClick = async (event) => {
     const title = inputs[0].value;
     const desc = inputs[1].value;
 
-    let lastId;
-
-    if (todoArray.length == 0) {
-        lastId = 0;
-    }
-    else {
-        lastId = todoArray.reduce((max, todo) => (Number(todo.id) > max ? max = todo.id : max), Number(todoArray[0].id));
-    }
-
     const newTodo = {
         title: title,
         description: desc,
-        createdAt: Date.now(),
-        done: false,
-        id: Number(lastId) + 1
     }
 
-    try {
-        const data = await fetch("https://6709508caf1a3998baa11eb3.mockapi.io/api/v1/todos", {
-            method: "POST",
-            body: JSON.stringify(newTodo),
-            headers: {
-                'Content-Type': 'application/json'
-            }   
-        })
-    } catch(err) {
-        console.log(err);
-    }
+    await postData(newTodo);
 
-    todoArray.push(newTodo);
 
-    handleSort(event, sortDirectionMap[select.value]);
-
-    renderTodos();
+    loadTodos();
 
     inputs[0].value = '';
     inputs[1].value = '';
-
-    console.log(todoArray);
 }
 
 const handleDelete = async(event) => {
+    showLoader();
     if (event.target.tagName == "BUTTON") {
 
         const itemId = event.target.closest(".new_todo").dataset.id;
 
-        try {
-        await fetch(`https://6709508caf1a3998baa11eb3.mockapi.io/api/v1/todos/${itemId} `, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json'
-            }   
-        })
-        event.target.closest(".new_todo").remove();
-        } catch(err) {
-            console.log(err);
-        }
+        await deleteData(itemId);
 
-        const newTodos = todoArray.filter(item => item.id != itemId);
-        todoArray = newTodos;
-        console.log(todoArray);
-    } 
+        event.target.closest(".new_todo").remove();
+
+        const newTodos = todos.filter(item => item.id != itemId);
+        todos = newTodos;
+    }
+    hideLoader();
 }
 
 const sortDirectionMap = {
@@ -112,14 +80,27 @@ const sortDirectionMap = {
 }
 
 const handleSort = (event, param) => {
-
-    todoArray.sort((a,b) => a.title.localeCompare(b.title) * param);
+    showLoader();
+    todos.sort((a,b) => a.title.localeCompare(b.title) * param);
 
     todoList.innerHTML = '';
     renderTodos();
+    hideLoader();   
 }
 
+const showLoader = () => {
+    loader.style.display = 'block';
+    button.disabled = true;
+    sortButton.disabled = true;
+    todoList.style.opacity = 0.3;
+}
 
+const hideLoader = () => {
+    loader.style.display = 'none';
+    button.disabled = false;
+    sortButton.disabled = false;
+    todoList.style.opacity = 1;
+}
 
 button.addEventListener("click", handleClick);
 
@@ -127,7 +108,4 @@ todoList.addEventListener("click", handleDelete);
 
 sortButton.addEventListener("click", (event) => handleSort(event, sortDirectionMap[select.value]));
 
-fetchData().then(() => renderTodosInitial());
-
-
-//лейблы сортировка при добавлением, сортировка через select, все запросы перенести в отдельный скрипт и сделать модулем
+loadTodos();
